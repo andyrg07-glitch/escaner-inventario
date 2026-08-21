@@ -376,7 +376,7 @@ function jsonp(url){
   return new Promise((resolve,reject)=>{
 
     const callbackName =
-      'jsonp_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+      'cb_' + Date.now() + '_' + Math.floor(Math.random()*100000);
 
     const script = document.createElement('script');
 
@@ -390,9 +390,7 @@ function jsonp(url){
 
       cleanup();
 
-      reject(
-        new Error('Tiempo de espera agotado al conectar con Apps Script')
-      );
+      reject(new Error('Tiempo de espera agotado al conectar con Apps Script'));
 
     },20000);
 
@@ -408,6 +406,52 @@ function jsonp(url){
       resolve(data);
 
     };
+
+
+    function cleanup(){
+
+      clearTimeout(timeout);
+
+      try{
+        delete window[callbackName];
+      }catch(e){}
+
+      if(script.parentNode){
+        script.parentNode.removeChild(script);
+      }
+
+    }
+
+
+    const separator = url.includes('?') ? '&' : '?';
+
+    script.src =
+      url +
+      separator +
+      'callback=' +
+      encodeURIComponent(callbackName) +
+      '&_ts=' +
+      Date.now();
+
+    script.async = true;
+
+    script.onerror = function(){
+
+      if(finished) return;
+
+      finished = true;
+
+      cleanup();
+
+      reject(new Error('No se pudo conectar con Apps Script'));
+
+    };
+
+    document.head.appendChild(script);
+
+  });
+
+}
 
 
     function cleanup(){
