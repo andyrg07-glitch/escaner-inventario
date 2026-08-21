@@ -7,24 +7,23 @@
 <title>Control de Inventario</title>
 
 <style>
-
 body{
   font-family:Arial,sans-serif;
   margin:0;
   background:#f3f5f9;
-  color:#222
+  color:#222;
 }
 
 .wrap{
   max-width:560px;
   margin:auto;
-  padding:16px
+  padding:16px;
 }
 
 h1{
   font-size:23px;
   color:#3D558C;
-  margin:8px 0 14px
+  margin:8px 0 14px;
 }
 
 .card{
@@ -32,7 +31,7 @@ h1{
   border-radius:16px;
   padding:16px;
   margin:12px 0;
-  box-shadow:0 2px 10px #0001
+  box-shadow:0 2px 10px #0001;
 }
 
 video{
@@ -40,7 +39,7 @@ video{
   min-height:260px;
   background:#111;
   border-radius:12px;
-  object-fit:cover
+  object-fit:cover;
 }
 
 button{
@@ -52,12 +51,13 @@ button{
   color:#fff;
   font-size:17px;
   font-weight:bold;
-  margin-top:8px
+  margin-top:8px;
+  cursor:pointer;
 }
 
-button.secondary{background:#666}
-button.green{background:#287a3e}
-button.red{background:#b3261e}
+button.secondary{
+  background:#666;
+}
 
 input,select{
   width:100%;
@@ -66,30 +66,40 @@ input,select{
   margin:5px 0 12px;
   border:1px solid #ccc;
   border-radius:9px;
-  font-size:16px
+  font-size:16px;
 }
 
 label{
   font-weight:bold;
-  font-size:14px
+  font-size:14px;
 }
 
 .status{
   padding:11px;
   border-radius:9px;
   margin-top:10px;
-  font-size:14px
+  font-size:14px;
 }
 
-.ok{background:#e4f4e1}
-.warn{background:#fff0c7}
-.err{background:#f8d7da}
+.ok{
+  background:#e4f4e1;
+}
 
-.hidden{display:none}
+.warn{
+  background:#fff0c7;
+}
+
+.err{
+  background:#f8d7da;
+}
+
+.hidden{
+  display:none;
+}
 
 .small{
   font-size:12px;
-  color:#666
+  color:#666;
 }
 
 .scannerInput{
@@ -97,12 +107,12 @@ label{
   font-weight:bold;
   text-align:center;
   border:2px solid #3D558C;
-  background:#f8faff
+  background:#f8faff;
 }
 
 .producto{
   font-size:18px;
-  font-weight:bold
+  font-weight:bold;
 }
 
 .stock{
@@ -110,20 +120,32 @@ label{
   background:#eef2fa;
   border-radius:12px;
   padding:15px;
-  margin:10px 0
+  margin:10px 0;
 }
 
 .stockNumber{
   font-size:36px;
   font-weight:bold;
-  color:#3D558C
+  color:#3D558C;
 }
 
 .mode{
   font-size:18px;
-  font-weight:bold
+  font-weight:bold;
 }
 
+.checkline{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:5px;
+  margin-bottom:8px;
+}
+
+.checkline input{
+  width:auto;
+  margin:0;
+}
 </style>
 </head>
 
@@ -134,185 +156,168 @@ label{
 <h1>📦 CONTROL DE INVENTARIO</h1>
 
 
-<!-- LECTOR FÍSICO -->
+<!-- =========================
+     LECTOR FÍSICO
+========================= -->
 
 <div class="card">
 
-<label>🔫 LECTOR USB / BLUETOOTH</label>
+  <label>🔫 LECTOR USB / BLUETOOTH</label>
 
-<input
-  id="scannerInput"
-  class="scannerInput"
-  autocomplete="off"
-  placeholder="ESCANEA AQUÍ"
->
+  <input
+    id="scannerInput"
+    class="scannerInput"
+    autocomplete="off"
+    inputmode="none"
+    placeholder="ESCANEA AQUÍ"
+  >
 
-<div class="small">
-Haz clic aquí una vez y escanea con el lector CHAOAO.
+  <div class="small">
+    El lector CHAOAO escribirá aquí el código y enviará Enter automáticamente.
+  </div>
+
 </div>
 
-</div>
 
-
-<!-- MODO -->
+<!-- =========================
+     MODO
+========================= -->
 
 <div class="card">
 
-<label>MODO DE OPERACIÓN</label>
+  <label>MODO DE OPERACIÓN</label>
 
-<select id="modo" class="mode">
+  <select id="modo" class="mode">
+    <option value="CONSULTA">🔎 CONSULTA</option>
+    <option value="ENTRADA">📥 ENTRADA</option>
+    <option value="SALIDA">📤 SALIDA</option>
+    <option value="AJUSTE">⚙️ AJUSTE</option>
+  </select>
 
-<option value="CONSULTA">
-🔎 CONSULTA
-</option>
+  <label>Cantidad por escaneo</label>
 
-<option value="ENTRADA">
-📥 ENTRADA
-</option>
+  <input
+    id="cantidadRapida"
+    type="number"
+    min="0.01"
+    step="0.01"
+    value="1"
+  >
 
-<option value="SALIDA">
-📤 SALIDA
-</option>
+  <div class="checkline">
+    <input type="checkbox" id="automatico">
+    <label for="automatico">
+      Registrar automáticamente después de escanear
+    </label>
+  </div>
 
-<option value="AJUSTE">
-⚙️ AJUSTE
-</option>
-
-</select>
-
-
-<label>Cantidad por escaneo</label>
-
-<input
- id="cantidadRapida"
- type="number"
- min="0.01"
- step="0.01"
- value="1"
->
-
-<label>
-<input
- type="checkbox"
- id="automatico"
- style="width:auto"
->
-Registrar automáticamente después de escanear
-</label>
-
-<div class="small">
-Para mayor seguridad, empieza usando el registro automático
-desactivado.
-</div>
+  <div class="small">
+    Primero prueba con el registro automático desactivado.
+  </div>
 
 </div>
 
 
-<!-- CÁMARA -->
+<!-- =========================
+     CÁMARA
+========================= -->
 
 <div class="card">
 
-<video id="video" autoplay playsinline muted></video>
+  <video id="video" autoplay playsinline muted></video>
 
-<label for="cameraSelect">Cámara</label>
+  <label for="cameraSelect">Cámara</label>
+  <select id="cameraSelect"></select>
 
-<select id="cameraSelect"></select>
+  <button id="scanBtn" onclick="startCamera()">
+    📷 ABRIR CÁMARA
+  </button>
 
-<button id="scanBtn" onclick="startCamera()">
-📷 ABRIR CÁMARA
-</button>
+  <button
+    id="stopBtn"
+    class="secondary hidden"
+    onclick="stopCamera()"
+  >
+    DETENER CÁMARA
+  </button>
 
-<button
- id="stopBtn"
- class="secondary hidden"
- onclick="stopCamera()">
-DETENER CÁMARA
-</button>
-
-<div id="status"></div>
+  <div id="status"></div>
 
 </div>
 
 
-<!-- PRODUCTO -->
+<!-- =========================
+     INFORMACIÓN DEL PRODUCTO
+========================= -->
 
 <div class="card">
 
-<label>Código de barras</label>
-<input id="barcode" readonly>
+  <label>Código de barras</label>
+  <input id="barcode" readonly>
 
-<label>Clave</label>
-<input id="clave">
+  <label>Clave</label>
+  <input id="clave" placeholder="Clave del producto">
 
-<label>Producto</label>
-<input id="producto" class="producto" readonly>
-
-
-<div id="stockBox" class="stock hidden">
-
-<div>EXISTENCIA ACTUAL</div>
-
-<div id="existencia" class="stockNumber">
-0
-</div>
-
-<div id="estado"></div>
-
-</div>
+  <label>Producto</label>
+  <input id="producto" class="producto" readonly>
 
 
-<!-- ALTA -->
+  <div id="stockBox" class="stock hidden">
 
-<div id="altaBox" class="hidden">
+    <div>EXISTENCIA ACTUAL</div>
 
-<div class="status warn">
-⚠️ Código nuevo. Captura la CLAVE para relacionarlo.
-</div>
+    <div id="existencia" class="stockNumber">
+      0
+    </div>
 
-<button onclick="alta()">
-➕ DAR DE ALTA CÓDIGO
-</button>
+    <div id="estado"></div>
 
-</div>
+  </div>
 
 
-<!-- MOVIMIENTO -->
+  <!-- ALTA DE CÓDIGO -->
 
-<div id="movBox" class="hidden">
+  <div id="altaBox" class="hidden">
 
-<label>Cantidad</label>
+    <div class="status warn">
+      ⚠️ Código nuevo. Captura la CLAVE para relacionarlo con un producto.
+    </div>
 
-<input
- id="cantidad"
- type="number"
- min="0.01"
- step="0.01"
- value="1"
->
+    <button onclick="alta()">
+      ➕ DAR DE ALTA CÓDIGO
+    </button>
 
-<label>Usuario</label>
+  </div>
 
-<input
- id="usuario"
- placeholder="Nombre"
->
 
-<label>Referencia</label>
+  <!-- MOVIMIENTO -->
 
-<input
- id="referencia"
- placeholder="Ej. compra, venta"
->
+  <div id="movBox" class="hidden">
 
-<label>Observaciones</label>
+    <label>Cantidad</label>
 
-<input id="observaciones">
+    <input
+      id="cantidad"
+      type="number"
+      min="0.01"
+      step="0.01"
+      value="1"
+    >
 
-<button onclick="registrar()">
-✅ REGISTRAR MOVIMIENTO
-</button>
+    <label>Usuario</label>
+    <input id="usuario" placeholder="Nombre">
 
-</div>
+    <label>Referencia</label>
+    <input id="referencia" placeholder="Ej. compra, venta, ajuste">
+
+    <label>Observaciones</label>
+    <input id="observaciones">
+
+    <button onclick="registrar()">
+      ✅ REGISTRAR MOVIMIENTO
+    </button>
+
+  </div>
 
 </div>
 
@@ -323,64 +328,91 @@ DETENER CÁMARA
 
 <script>
 
-const API='https://script.google.com/macros/s/AKfycbwQMousq8gdmOt_9ZzKp28NoG5ZLzuoskzGDDif5pBIkIbb6AvtryBPcOaD4x2xIUoZoQ/exec';
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
+
+const API =
+'https://script.google.com/macros/s/AKfycbwQMousq8gdmOt_9ZzKp28NoG5ZLzuoskzGDDif5pBIkIbb6AvtryBPcOaD4x2xIUoZoQ/exec';
 
 
-let stream=null;
-let scanning=false;
-let codeReader=null;
-let lastCode='';
-let scanTimer=null;
-let processing=false;
+let stream = null;
+let scanning = false;
+let codeReader = null;
+let scanTimer = null;
+let processing = false;
 
 
-const video=document.getElementById('video');
-const cameraSelect=document.getElementById('cameraSelect');
-const scannerInput=document.getElementById('scannerInput');
+const video =
+document.getElementById('video');
+
+const cameraSelect =
+document.getElementById('cameraSelect');
+
+const scannerInput =
+document.getElementById('scannerInput');
 
 
-function showStatus(text,cls='ok'){
+/* =====================================================
+   INTERFAZ
+===================================================== */
 
- document.getElementById('status').innerHTML=
- '<div class="status '+cls+'">'+text+'</div>';
+function showStatus(text, cls='ok'){
+
+  document.getElementById('status').innerHTML =
+    '<div class="status ' + cls + '">' +
+    text +
+    '</div>';
 
 }
 
 
 function altaBox(show){
 
- document.getElementById('altaBox')
- .classList.toggle('hidden',!show);
+  document
+    .getElementById('altaBox')
+    .classList.toggle('hidden', !show);
 
 }
 
 
 function movBox(show){
 
- document.getElementById('movBox')
- .classList.toggle('hidden',!show);
+  document
+    .getElementById('movBox')
+    .classList.toggle('hidden', !show);
 
 }
 
 
 function stockBox(show){
 
- document.getElementById('stockBox')
- .classList.toggle('hidden',!show);
+  document
+    .getElementById('stockBox')
+    .classList.toggle('hidden', !show);
 
 }
 
+
+/* =====================================================
+   CONEXIÓN APPS SCRIPT - JSONP
+===================================================== */
 
 function jsonp(url){
 
   return new Promise((resolve,reject)=>{
 
     const callbackName =
-      'cb_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+      'cb_' +
+      Date.now() +
+      '_' +
+      Math.floor(Math.random()*100000);
 
-    const script = document.createElement('script');
+    const script =
+      document.createElement('script');
 
     let finished = false;
+
 
     const timeout = setTimeout(()=>{
 
@@ -390,7 +422,11 @@ function jsonp(url){
 
       cleanup();
 
-      reject(new Error('Tiempo de espera agotado al conectar con Apps Script'));
+      reject(
+        new Error(
+          'Tiempo de espera agotado al conectar con Apps Script'
+        )
+      );
 
     },20000);
 
@@ -423,7 +459,9 @@ function jsonp(url){
     }
 
 
-    const separator = url.includes('?') ? '&' : '?';
+    const separator =
+      url.includes('?') ? '&' : '?';
+
 
     script.src =
       url +
@@ -431,53 +469,6 @@ function jsonp(url){
       'callback=' +
       encodeURIComponent(callbackName) +
       '&_ts=' +
-      Date.now();
-
-    script.async = true;
-
-    script.onerror = function(){
-
-      if(finished) return;
-
-      finished = true;
-
-      cleanup();
-
-      reject(new Error('No se pudo conectar con Apps Script'));
-
-    };
-
-    document.head.appendChild(script);
-
-  });
-
-}
-
-
-    function cleanup(){
-
-      clearTimeout(timeout);
-
-      try{
-        delete window[callbackName];
-      }catch(e){}
-
-      if(script.parentNode){
-        script.parentNode.removeChild(script);
-      }
-
-    }
-
-
-    const separator =
-      url.includes('?') ? '&' : '?';
-
-    script.src =
-      url +
-      separator +
-      'callback=' +
-      encodeURIComponent(callbackName) +
-      '&_=' +
       Date.now();
 
 
@@ -493,7 +484,9 @@ function jsonp(url){
       cleanup();
 
       reject(
-        new Error('No se pudo conectar con Apps Script')
+        new Error(
+          'No se pudo conectar con Apps Script'
+        )
       );
 
     };
@@ -504,3 +497,1070 @@ function jsonp(url){
   });
 
 }
+
+
+/* =====================================================
+   LECTOR FÍSICO CHAOAO
+===================================================== */
+
+scannerInput.addEventListener(
+'keydown',
+async function(event){
+
+  if(event.key !== 'Enter'){
+    return;
+  }
+
+  event.preventDefault();
+
+
+  const code =
+    String(scannerInput.value || '').trim();
+
+
+  scannerInput.value = '';
+
+
+  if(!code){
+    return;
+  }
+
+
+  await onCode(code, true);
+
+});
+
+
+/* =====================================================
+   CONSULTAR CÓDIGO
+===================================================== */
+
+async function onCode(code, physical=false){
+
+  code =
+    String(code || '').trim();
+
+
+  if(!code){
+    return;
+  }
+
+
+  if(processing){
+    return;
+  }
+
+
+  processing = true;
+
+
+  if(!physical){
+    await stopCamera();
+  }
+
+
+  document.getElementById('barcode').value =
+    code;
+
+  document.getElementById('clave').value =
+    '';
+
+  document.getElementById('producto').value =
+    '';
+
+  document.getElementById('existencia').textContent =
+    '0';
+
+  document.getElementById('estado').textContent =
+    '';
+
+
+  altaBox(false);
+  movBox(false);
+  stockBox(false);
+
+
+  showStatus(
+    '🔎 Código leído: ' +
+    code +
+    '. Buscando producto...'
+  );
+
+
+  try{
+
+    const url =
+      API +
+      '?action=lookup' +
+      '&barcode=' +
+      encodeURIComponent(code);
+
+
+    const r =
+      await jsonp(url);
+
+
+    console.log(
+      'Respuesta de Apps Script:',
+      r
+    );
+
+
+    if(r && r.ok === true){
+
+      document.getElementById('clave').value =
+        r.clave || '';
+
+      document.getElementById('producto').value =
+        r.producto || '';
+
+      document.getElementById('existencia').textContent =
+        Number(r.existencia || 0);
+
+      document.getElementById('estado').textContent =
+        r.estado || '';
+
+      stockBox(true);
+
+
+      const modo =
+        document.getElementById('modo').value;
+
+
+      if(modo === 'CONSULTA'){
+
+        showStatus(
+          '✅ ' +
+          (r.producto || 'PRODUCTO') +
+          ' | CLAVE: ' +
+          (r.clave || '') +
+          ' | EXISTENCIA: ' +
+          Number(r.existencia || 0)
+        );
+
+      }
+
+      else{
+
+        movBox(true);
+
+
+        const cantidadRapida =
+          document
+            .getElementById('cantidadRapida')
+            .value || 1;
+
+
+        document.getElementById('cantidad').value =
+          cantidadRapida;
+
+
+        showStatus(
+          '✅ PRODUCTO RECONOCIDO: ' +
+          (r.producto || '') +
+          ' | EXISTENCIA: ' +
+          Number(r.existencia || 0)
+        );
+
+
+        if(
+          document
+            .getElementById('automatico')
+            .checked
+        ){
+
+          /*
+            Liberamos processing para permitir
+            que registrar() continúe.
+          */
+
+          processing = false;
+
+          await registrar();
+
+          return;
+
+        }
+
+      }
+
+    }
+
+    else{
+
+      document.getElementById('clave').value =
+        '';
+
+      document.getElementById('producto').value =
+        '';
+
+      altaBox(true);
+
+
+      showStatus(
+        '⚠️ Código ' +
+        code +
+        ' no registrado. Captura la CLAVE.',
+        'warn'
+      );
+
+    }
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+
+    showStatus(
+      '❌ Error buscando producto: ' +
+      error.message,
+      'err'
+    );
+
+  }
+
+  finally{
+
+    processing = false;
+
+    scannerInput.value = '';
+
+
+    setTimeout(()=>{
+
+      scannerInput.focus();
+
+    },150);
+
+  }
+
+}
+
+
+/* =====================================================
+   ALTA DE CÓDIGO NUEVO
+===================================================== */
+
+async function alta(){
+
+  const code =
+    document
+      .getElementById('barcode')
+      .value
+      .trim();
+
+
+  const key =
+    document
+      .getElementById('clave')
+      .value
+      .trim();
+
+
+  const user =
+    document
+      .getElementById('usuario')
+      .value
+      .trim();
+
+
+  if(!code || !key){
+
+    showStatus(
+      '⚠️ Captura la CLAVE antes de dar de alta.',
+      'warn'
+    );
+
+    return;
+
+  }
+
+
+  showStatus(
+    'Registrando código...'
+  );
+
+
+  try{
+
+    const url =
+      API +
+      '?action=alta' +
+      '&barcode=' +
+      encodeURIComponent(code) +
+      '&clave=' +
+      encodeURIComponent(key) +
+      '&usuario=' +
+      encodeURIComponent(user);
+
+
+    const r =
+      await jsonp(url);
+
+
+    if(r && r.ok === true){
+
+      document.getElementById('producto').value =
+        r.producto || '';
+
+      altaBox(false);
+
+
+      showStatus(
+        '✅ Código dado de alta correctamente.'
+      );
+
+
+      /*
+        Volvemos a consultar para cargar
+        existencia y estado.
+      */
+
+      await onCode(code, true);
+
+    }
+
+    else{
+
+      showStatus(
+        (r && r.message)
+        ? r.message
+        : 'No se pudo dar de alta.',
+        'err'
+      );
+
+    }
+
+  }
+
+  catch(error){
+
+    showStatus(
+      '❌ ' + error.message,
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   REGISTRAR MOVIMIENTO
+===================================================== */
+
+async function registrar(){
+
+  if(processing){
+    return;
+  }
+
+
+  processing = true;
+
+
+  const tipo =
+    document.getElementById('modo').value;
+
+
+  const barcode =
+    document.getElementById('barcode').value.trim();
+
+
+  const cantidad =
+    Number(
+      document.getElementById('cantidad').value
+    );
+
+
+  const existenciaAntes =
+    Number(
+      document.getElementById('existencia').textContent || 0
+    );
+
+
+  if(tipo === 'CONSULTA'){
+
+    processing = false;
+
+    showStatus(
+      '⚠️ Selecciona ENTRADA, SALIDA o AJUSTE.',
+      'warn'
+    );
+
+    return;
+
+  }
+
+
+  if(!barcode){
+
+    processing = false;
+
+    showStatus(
+      '⚠️ Primero escanea un producto.',
+      'warn'
+    );
+
+    return;
+
+  }
+
+
+  if(!Number.isFinite(cantidad) || cantidad <= 0){
+
+    processing = false;
+
+    showStatus(
+      '⚠️ La cantidad debe ser mayor a 0.',
+      'warn'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    tipo === 'SALIDA' &&
+    cantidad > existenciaAntes
+  ){
+
+    processing = false;
+
+    showStatus(
+      '❌ EXISTENCIA INSUFICIENTE. Disponible: ' +
+      existenciaAntes +
+      ' | Intentas retirar: ' +
+      cantidad,
+      'err'
+    );
+
+    scannerInput.focus();
+
+    return;
+
+  }
+
+
+  const params =
+    new URLSearchParams({
+
+      action:'register',
+
+      barcode:barcode,
+
+      tipo:tipo,
+
+      cantidad:String(cantidad),
+
+      usuario:
+        document.getElementById('usuario').value,
+
+      referencia:
+        document.getElementById('referencia').value,
+
+      observaciones:
+        document.getElementById('observaciones').value
+
+    });
+
+
+  showStatus(
+    'Guardando movimiento...'
+  );
+
+
+  try{
+
+    const r =
+      await jsonp(
+        API + '?' + params.toString()
+      );
+
+
+    if(r && r.ok === true){
+
+      let nuevaExistencia =
+        existenciaAntes;
+
+
+      if(tipo === 'ENTRADA'){
+        nuevaExistencia += cantidad;
+      }
+
+
+      if(tipo === 'SALIDA'){
+        nuevaExistencia -= cantidad;
+      }
+
+
+      if(tipo === 'AJUSTE'){
+        nuevaExistencia += cantidad;
+      }
+
+
+      document.getElementById('existencia').textContent =
+        nuevaExistencia;
+
+
+      showStatus(
+        '✅ MOVIMIENTO REGISTRADO' +
+        '<br>' +
+        (r.producto || '') +
+        '<br>' +
+        tipo +
+        ': ' +
+        cantidad +
+        '<br>' +
+        'ANTES: ' +
+        existenciaAntes +
+        ' → AHORA: ' +
+        nuevaExistencia
+      );
+
+
+      document.getElementById('cantidad').value =
+        document
+          .getElementById('cantidadRapida')
+          .value || 1;
+
+
+      document.getElementById('referencia').value =
+        '';
+
+      document.getElementById('observaciones').value =
+        '';
+
+    }
+
+    else{
+
+      showStatus(
+        (r && r.message)
+        ? r.message
+        : 'No se pudo registrar el movimiento.',
+        'err'
+      );
+
+    }
+
+  }
+
+  catch(error){
+
+    showStatus(
+      '❌ ' + error.message,
+      'err'
+    );
+
+  }
+
+  finally{
+
+    processing = false;
+
+
+    setTimeout(()=>{
+
+      scannerInput.focus();
+
+    },150);
+
+  }
+
+}
+
+
+/* =====================================================
+   CÁMARAS
+===================================================== */
+
+async function loadCameras(){
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+
+    showStatus(
+      'Este navegador no soporta acceso a cámara.',
+      'err'
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const tmp =
+      await navigator.mediaDevices.getUserMedia({
+        video:true,
+        audio:false
+      });
+
+
+    tmp.getTracks().forEach(
+      track => track.stop()
+    );
+
+
+    const devices =
+      await navigator.mediaDevices.enumerateDevices();
+
+
+    const cameras =
+      devices.filter(
+        device => device.kind === 'videoinput'
+      );
+
+
+    cameraSelect.innerHTML = '';
+
+
+    cameras.forEach((camera,index)=>{
+
+      const option =
+        document.createElement('option');
+
+
+      option.value =
+        camera.deviceId;
+
+
+      option.textContent =
+        camera.label ||
+        ('Cámara ' + (index+1));
+
+
+      cameraSelect.appendChild(option);
+
+    });
+
+
+    const rear =
+      [...cameraSelect.options].find(
+        option =>
+          /back|rear|environment|trasera/i
+          .test(option.textContent)
+      );
+
+
+    if(rear){
+      cameraSelect.value = rear.value;
+    }
+
+  }
+
+  catch(error){
+
+    showStatus(
+      'No se pudieron listar cámaras: ' +
+      error.message,
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   ABRIR CÁMARA
+===================================================== */
+
+async function startCamera(){
+
+  if(!window.isSecureContext){
+
+    showStatus(
+      'La cámara requiere HTTPS.',
+      'err'
+    );
+
+    return;
+
+  }
+
+
+  await stopCamera();
+
+
+  const deviceId =
+    cameraSelect.value;
+
+
+  const constraints = {
+
+    video: deviceId
+      ? {
+          deviceId:{
+            exact:deviceId
+          },
+
+          width:{
+            ideal:1280
+          },
+
+          height:{
+            ideal:720
+          }
+        }
+
+      : {
+          facingMode:{
+            ideal:'environment'
+          },
+
+          width:{
+            ideal:1280
+          },
+
+          height:{
+            ideal:720
+          }
+        },
+
+    audio:false
+
+  };
+
+
+  try{
+
+    stream =
+      await navigator.mediaDevices.getUserMedia(
+        constraints
+      );
+
+
+    video.srcObject =
+      stream;
+
+
+    await video.play();
+
+
+    document
+      .getElementById('scanBtn')
+      .classList.add('hidden');
+
+
+    document
+      .getElementById('stopBtn')
+      .classList.remove('hidden');
+
+
+    scanning = true;
+
+
+    showStatus(
+      '📷 Cámara activa. Buscando código...'
+    );
+
+
+    startBarcodeLoop();
+
+  }
+
+  catch(error){
+
+    showStatus(
+      'No se pudo abrir la cámara: ' +
+      error.name +
+      ' - ' +
+      error.message,
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   DETENER CÁMARA
+===================================================== */
+
+async function stopCamera(){
+
+  scanning = false;
+
+
+  if(scanTimer){
+
+    clearTimeout(scanTimer);
+
+    scanTimer = null;
+
+  }
+
+
+  if(codeReader && codeReader.reset){
+
+    try{
+      codeReader.reset();
+    }catch(e){}
+
+  }
+
+
+  if(stream){
+
+    stream
+      .getTracks()
+      .forEach(
+        track => track.stop()
+      );
+
+    stream = null;
+
+  }
+
+
+  video.srcObject = null;
+
+
+  document
+    .getElementById('scanBtn')
+    .classList.remove('hidden');
+
+
+  document
+    .getElementById('stopBtn')
+    .classList.add('hidden');
+
+}
+
+
+/* =====================================================
+   LECTOR DE CÓDIGO POR CÁMARA
+===================================================== */
+
+async function startBarcodeLoop(){
+
+  /*
+    Primero intentamos BarcodeDetector
+  */
+
+  if('BarcodeDetector' in window){
+
+    try{
+
+      const supported =
+        await BarcodeDetector.getSupportedFormats();
+
+
+      const wanted = [
+        'ean_13',
+        'ean_8',
+        'upc_a',
+        'upc_e',
+        'code_128',
+        'code_39',
+        'itf',
+        'codabar'
+      ];
+
+
+      const formats =
+        wanted.filter(
+          format =>
+            supported.includes(format)
+        );
+
+
+      const detector =
+        new BarcodeDetector({
+          formats:
+            formats.length
+            ? formats
+            : undefined
+        });
+
+
+      const loop = async()=>{
+
+        if(!scanning){
+          return;
+        }
+
+
+        try{
+
+          const codes =
+            await detector.detect(video);
+
+
+          if(codes && codes.length){
+
+            const raw =
+              String(
+                codes[0].rawValue || ''
+              ).trim();
+
+
+            if(raw){
+
+              await onCode(raw, false);
+
+              return;
+
+            }
+
+          }
+
+        }
+
+        catch(e){}
+
+
+        scanTimer =
+          setTimeout(loop,180);
+
+      };
+
+
+      loop();
+
+      return;
+
+    }
+
+    catch(e){}
+
+  }
+
+
+  /*
+    Respaldo ZXing
+  */
+
+  try{
+
+    codeReader =
+      new ZXing.BrowserMultiFormatReader();
+
+
+    const deviceId =
+      cameraSelect.value || undefined;
+
+
+    codeReader.decodeFromVideoDevice(
+
+      deviceId,
+
+      video,
+
+      (result,error)=>{
+
+        if(!scanning){
+          return;
+        }
+
+
+        if(result){
+
+          const raw =
+            String(
+              result.getText() || ''
+            ).trim();
+
+
+          if(raw){
+
+            onCode(raw,false);
+
+          }
+
+        }
+
+      }
+
+    );
+
+  }
+
+  catch(error){
+
+    showStatus(
+      'La cámara abrió, pero no se pudo iniciar el lector: ' +
+      error.message,
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   CAMBIO DE MODO
+===================================================== */
+
+document
+.getElementById('modo')
+.addEventListener('change',()=>{
+
+  const modo =
+    document.getElementById('modo').value;
+
+
+  if(modo === 'CONSULTA'){
+
+    movBox(false);
+
+  }
+
+  else if(
+    document.getElementById('barcode').value
+  ){
+
+    movBox(true);
+
+  }
+
+
+  scannerInput.focus();
+
+});
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+window.addEventListener(
+'load',
+async()=>{
+
+  await loadCameras();
+
+  scannerInput.focus();
+
+
+  showStatus(
+    '✅ Sistema listo. Escanea un producto.'
+  );
+
+});
+
+
+cameraSelect.addEventListener(
+'change',
+()=>{
+
+  if(stream){
+    startCamera();
+  }
+
+});
+
+</script>
+
+</body>
+</html>
