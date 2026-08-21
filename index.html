@@ -3,56 +3,1185 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>Control de Inventario</title>
+
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f3f5f9;color:#222}.wrap{max-width:520px;margin:auto;padding:16px}h1{font-size:23px;color:#3D558C;margin:8px 0 14px}.card{background:#fff;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 10px #0001}video{width:100%;min-height:260px;background:#111;border-radius:12px;object-fit:cover}button{width:100%;padding:14px;border:0;border-radius:10px;background:#3D558C;color:#fff;font-size:17px;font-weight:bold;margin-top:8px}button.secondary{background:#666}input,select{width:100%;box-sizing:border-box;padding:12px;margin:5px 0 12px;border:1px solid #ccc;border-radius:9px;font-size:16px}label{font-weight:bold;font-size:14px}.status{padding:11px;border-radius:9px;margin-top:10px;font-size:14px}.ok{background:#e4f4e1}.warn{background:#fff0c7}.err{background:#f8d7da}.hidden{display:none}.small{font-size:12px;color:#666}
+
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f3f5f9;
+  color:#222
+}
+
+.wrap{
+  max-width:560px;
+  margin:auto;
+  padding:16px
+}
+
+h1{
+  font-size:23px;
+  color:#3D558C;
+  margin:8px 0 14px
+}
+
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  margin:12px 0;
+  box-shadow:0 2px 10px #0001
+}
+
+video{
+  width:100%;
+  min-height:260px;
+  background:#111;
+  border-radius:12px;
+  object-fit:cover
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:#3D558C;
+  color:#fff;
+  font-size:17px;
+  font-weight:bold;
+  margin-top:8px
+}
+
+button.secondary{background:#666}
+button.green{background:#287a3e}
+button.red{background:#b3261e}
+
+input,select{
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  margin:5px 0 12px;
+  border:1px solid #ccc;
+  border-radius:9px;
+  font-size:16px
+}
+
+label{
+  font-weight:bold;
+  font-size:14px
+}
+
+.status{
+  padding:11px;
+  border-radius:9px;
+  margin-top:10px;
+  font-size:14px
+}
+
+.ok{background:#e4f4e1}
+.warn{background:#fff0c7}
+.err{background:#f8d7da}
+
+.hidden{display:none}
+
+.small{
+  font-size:12px;
+  color:#666
+}
+
+.scannerInput{
+  font-size:22px;
+  font-weight:bold;
+  text-align:center;
+  border:2px solid #3D558C;
+  background:#f8faff
+}
+
+.producto{
+  font-size:18px;
+  font-weight:bold
+}
+
+.stock{
+  text-align:center;
+  background:#eef2fa;
+  border-radius:12px;
+  padding:15px;
+  margin:10px 0
+}
+
+.stockNumber{
+  font-size:36px;
+  font-weight:bold;
+  color:#3D558C
+}
+
+.mode{
+  font-size:18px;
+  font-weight:bold
+}
+
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
 <h1>📦 CONTROL DE INVENTARIO</h1>
+
+
+<!-- LECTOR FÍSICO -->
+
 <div class="card">
-  <video id="video" autoplay playsinline muted></video>
-  <label for="cameraSelect">Cámara</label>
-  <select id="cameraSelect"></select>
-  <button id="scanBtn" onclick="startCamera()">📷 ABRIR CÁMARA</button>
-  <button id="stopBtn" class="secondary hidden" onclick="stopCamera()">DETENER CÁMARA</button>
-  <div class="small">Apunta al código de barras y mantenlo centrado.</div>
-  <div id="status"></div>
+
+<label>🔫 LECTOR USB / BLUETOOTH</label>
+
+<input
+  id="scannerInput"
+  class="scannerInput"
+  autocomplete="off"
+  placeholder="ESCANEA AQUÍ"
+>
+
+<div class="small">
+Haz clic aquí una vez y escanea con el lector CHAOAO.
 </div>
+
+</div>
+
+
+<!-- MODO -->
+
 <div class="card">
-  <label>Código de barras</label><input id="barcode" readonly>
-  <label>Clave</label><input id="clave" placeholder="Se completa automáticamente">
-  <label>Producto</label><input id="producto" readonly>
-  <div id="altaBox" class="hidden"><div class="status warn">Código nuevo. Captura la CLAVE y regístralo una sola vez.</div><button onclick="alta()">➕ DAR DE ALTA CÓDIGO</button></div>
-  <div id="movBox" class="hidden">
-    <label>Movimiento</label><select id="tipo"><option>ENTRADA</option><option>SALIDA</option><option>AJUSTE</option></select>
-    <label>Cantidad</label><input id="cantidad" type="number" min="0.01" step="0.01" value="1">
-    <label>Usuario</label><input id="usuario" placeholder="Nombre">
-    <label>Referencia</label><input id="referencia" placeholder="Ej. compra, venta, ajuste">
-    <label>Observaciones</label><input id="observaciones">
-    <button onclick="registrar()">✅ REGISTRAR MOVIMIENTO</button>
-  </div>
+
+<label>MODO DE OPERACIÓN</label>
+
+<select id="modo" class="mode">
+
+<option value="CONSULTA">
+🔎 CONSULTA
+</option>
+
+<option value="ENTRADA">
+📥 ENTRADA
+</option>
+
+<option value="SALIDA">
+📤 SALIDA
+</option>
+
+<option value="AJUSTE">
+⚙️ AJUSTE
+</option>
+
+</select>
+
+
+<label>Cantidad por escaneo</label>
+
+<input
+ id="cantidadRapida"
+ type="number"
+ min="0.01"
+ step="0.01"
+ value="1"
+>
+
+<label>
+<input
+ type="checkbox"
+ id="automatico"
+ style="width:auto"
+>
+Registrar automáticamente después de escanear
+</label>
+
+<div class="small">
+Para mayor seguridad, empieza usando el registro automático
+desactivado.
 </div>
+
 </div>
+
+
+<!-- CÁMARA -->
+
+<div class="card">
+
+<video id="video" autoplay playsinline muted></video>
+
+<label for="cameraSelect">Cámara</label>
+
+<select id="cameraSelect"></select>
+
+<button id="scanBtn" onclick="startCamera()">
+📷 ABRIR CÁMARA
+</button>
+
+<button
+ id="stopBtn"
+ class="secondary hidden"
+ onclick="stopCamera()">
+DETENER CÁMARA
+</button>
+
+<div id="status"></div>
+
+</div>
+
+
+<!-- PRODUCTO -->
+
+<div class="card">
+
+<label>Código de barras</label>
+<input id="barcode" readonly>
+
+<label>Clave</label>
+<input id="clave">
+
+<label>Producto</label>
+<input id="producto" class="producto" readonly>
+
+
+<div id="stockBox" class="stock hidden">
+
+<div>EXISTENCIA ACTUAL</div>
+
+<div id="existencia" class="stockNumber">
+0
+</div>
+
+<div id="estado"></div>
+
+</div>
+
+
+<!-- ALTA -->
+
+<div id="altaBox" class="hidden">
+
+<div class="status warn">
+⚠️ Código nuevo. Captura la CLAVE para relacionarlo.
+</div>
+
+<button onclick="alta()">
+➕ DAR DE ALTA CÓDIGO
+</button>
+
+</div>
+
+
+<!-- MOVIMIENTO -->
+
+<div id="movBox" class="hidden">
+
+<label>Cantidad</label>
+
+<input
+ id="cantidad"
+ type="number"
+ min="0.01"
+ step="0.01"
+ value="1"
+>
+
+<label>Usuario</label>
+
+<input
+ id="usuario"
+ placeholder="Nombre"
+>
+
+<label>Referencia</label>
+
+<input
+ id="referencia"
+ placeholder="Ej. compra, venta"
+>
+
+<label>Observaciones</label>
+
+<input id="observaciones">
+
+<button onclick="registrar()">
+✅ REGISTRAR MOVIMIENTO
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
 <script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
+
 <script>
-const API='https://script.google.com/macros/s/AKfycbwQMousq8gdmOt_9ZzKp28NoG5ZLzuoskzGDDif5pBIkIbb6AvtryBPcOaD4x2xIUoZoQ/exec';
-let stream=null, scanning=false, codeReader=null, lastCode='', scanTimer=null;
-const video=document.getElementById('video'), cameraSelect=document.getElementById('cameraSelect');
-function showStatus(text,cls='ok'){document.getElementById('status').innerHTML='<div class="status '+cls+'">'+text+'</div>'}
-function altaBox(show){document.getElementById('altaBox').classList.toggle('hidden',!show)}
-function movBox(show){document.getElementById('movBox').classList.toggle('hidden',!show)}
-function jsonp(url){return new Promise((resolve,reject)=>{const cb='cb_'+Date.now()+'_'+Math.floor(Math.random()*100000),s=document.createElement('script');const timer=setTimeout(()=>{cleanup();reject(new Error('Tiempo de espera agotado'))},15000);window[cb]=(data)=>{cleanup();resolve(data)};function cleanup(){clearTimeout(timer);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s)}s.src=url+'&callback='+cb;s.onerror=()=>{cleanup();reject(new Error('No se pudo conectar con Apps Script'))};document.body.appendChild(s)})}
-async function loadCameras(){try{const tmp=await navigator.mediaDevices.getUserMedia({video:true,audio:false});tmp.getTracks().forEach(t=>t.stop());const devices=await navigator.mediaDevices.enumerateDevices(),cams=devices.filter(d=>d.kind==='videoinput');cameraSelect.innerHTML='';cams.forEach((cam,i)=>{const opt=document.createElement('option');opt.value=cam.deviceId;opt.textContent=cam.label||('Cámara '+(i+1));cameraSelect.appendChild(opt)});const rear=[...cameraSelect.options].find(o=>/back|rear|environment|trasera/i.test(o.textContent));if(rear)cameraSelect.value=rear.value;if(!cams.length)showStatus('No se detectaron cámaras.','err')}catch(e){showStatus('No se pudieron listar cámaras: '+e.message,'err')}}
-async function startCamera(){if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){showStatus('Este navegador no soporta acceso a cámara.','err');return}if(!window.isSecureContext){showStatus('La página debe abrirse por HTTPS.','err');return}await stopCamera();const deviceId=cameraSelect.value;const constraints={video:deviceId?{deviceId:{exact:deviceId},width:{ideal:1280},height:{ideal:720}}:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false};try{stream=await navigator.mediaDevices.getUserMedia(constraints);video.srcObject=stream;await video.play();document.getElementById('scanBtn').classList.add('hidden');document.getElementById('stopBtn').classList.remove('hidden');showStatus('✅ Cámara abierta. Buscando código de barras...');scanning=true;startBarcodeLoop()}catch(e){showStatus('No se pudo abrir la cámara: '+e.name+' - '+e.message,'err')}}
-async function stopCamera(){scanning=false;if(scanTimer){clearTimeout(scanTimer);scanTimer=null}if(codeReader&&codeReader.reset){try{codeReader.reset()}catch(e){}}if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}video.srcObject=null;document.getElementById('scanBtn').classList.remove('hidden');document.getElementById('stopBtn').classList.add('hidden')}
-async function startBarcodeLoop(){if('BarcodeDetector' in window){try{const supported=await BarcodeDetector.getSupportedFormats(),wanted=['ean_13','ean_8','upc_a','upc_e','code_128','code_39','itf','codabar'],formats=wanted.filter(x=>supported.includes(x)),detector=new BarcodeDetector({formats:formats.length?formats:undefined});const loop=async()=>{if(!scanning)return;try{const codes=await detector.detect(video);if(codes&&codes.length){const raw=String(codes[0].rawValue||'').trim();if(raw){await onCode(raw);return}}}catch(e){}scanTimer=setTimeout(loop,180)};loop();return}catch(e){}}
-try{codeReader=new ZXing.BrowserMultiFormatReader();const deviceId=cameraSelect.value||undefined;codeReader.decodeFromVideoDevice(deviceId,video,(result,err)=>{if(!scanning)return;if(result){const raw=String(result.getText()||'').trim();if(raw)onCode(raw)}})}catch(e){showStatus('La cámara abrió, pero no se pudo iniciar el lector: '+e.message,'err')}}
-async function onCode(code){if(!code||code===lastCode)return;lastCode=code;await stopCamera();document.getElementById('barcode').value=code;altaBox(false);movBox(false);showStatus('Código leído: '+code+'. Buscando producto...');try{const r=await jsonp(API+'?action=lookup&barcode='+encodeURIComponent(code));if(r.ok){document.getElementById('clave').value=r.clave;document.getElementById('producto').value=r.producto;movBox(true);showStatus('✅ Producto reconocido. Ya puedes registrar el movimiento.')}else{document.getElementById('clave').value='';document.getElementById('producto').value='';altaBox(true);showStatus('⚠️ Código nuevo. Captura la CLAVE y pulsa DAR DE ALTA.','warn')}}catch(e){showStatus(e.message,'err')}}
-async function alta(){const code=document.getElementById('barcode').value,key=document.getElementById('clave').value.trim(),user=document.getElementById('usuario').value.trim();if(!code||!key){showStatus('Captura la CLAVE antes de dar de alta.','warn');return}showStatus('Registrando código...');try{const r=await jsonp(API+'?action=alta&barcode='+encodeURIComponent(code)+'&clave='+encodeURIComponent(key)+'&usuario='+encodeURIComponent(user));if(r.ok){document.getElementById('producto').value=r.producto;altaBox(false);movBox(true);showStatus('✅ Código dado de alta. Ahora puedes registrar la ENTRADA.')}else showStatus(r.message||'No se pudo dar de alta.','err')}catch(e){showStatus(e.message,'err')}}
-async function registrar(){const p=new URLSearchParams({action:'register',barcode:document.getElementById('barcode').value,tipo:document.getElementById('tipo').value,cantidad:document.getElementById('cantidad').value,usuario:document.getElementById('usuario').value,referencia:document.getElementById('referencia').value,observaciones:document.getElementById('observaciones').value});showStatus('Guardando movimiento...');try{const r=await jsonp(API+'?'+p.toString());if(r.ok){showStatus('✅ Movimiento registrado: '+r.producto+' — '+r.tipo+' '+r.cantidad);document.getElementById('cantidad').value=1;document.getElementById('referencia').value='';document.getElementById('observaciones').value='';lastCode=''}else showStatus(r.message||'No se pudo registrar.','err')}catch(e){showStatus(e.message,'err')}}
-window.addEventListener('load',loadCameras);cameraSelect.addEventListener('change',()=>{if(stream)startCamera()});
+
+const API =
+'https://script.google.com/macros/s/AKfycbwQMousq8gdmOt_9ZzKp28NoG5ZLzuoskzGDDif5pBIkIbb6AvtryBPcOaD4x2xIUoZoQ/exec';
+
+
+let stream=null;
+let scanning=false;
+let codeReader=null;
+let lastCode='';
+let scanTimer=null;
+let processing=false;
+
+
+const video=document.getElementById('video');
+const cameraSelect=document.getElementById('cameraSelect');
+const scannerInput=document.getElementById('scannerInput');
+
+
+function showStatus(text,cls='ok'){
+
+ document.getElementById('status').innerHTML=
+ '<div class="status '+cls+'">'+text+'</div>';
+
+}
+
+
+function altaBox(show){
+
+ document.getElementById('altaBox')
+ .classList.toggle('hidden',!show);
+
+}
+
+
+function movBox(show){
+
+ document.getElementById('movBox')
+ .classList.toggle('hidden',!show);
+
+}
+
+
+function stockBox(show){
+
+ document.getElementById('stockBox')
+ .classList.toggle('hidden',!show);
+
+}
+
+
+function jsonp(url){
+
+ return new Promise((resolve,reject)=>{
+
+  const cb=
+  'cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+
+  const s=document.createElement('script');
+
+  const timer=setTimeout(()=>{
+
+   cleanup();
+
+   reject(
+    new Error('Tiempo de espera agotado')
+   );
+
+  },15000);
+
+
+  window[cb]=(data)=>{
+
+   cleanup();
+
+   resolve(data);
+
+  };
+
+
+  function cleanup(){
+
+   clearTimeout(timer);
+
+   delete window[cb];
+
+   if(s.parentNode)
+    s.parentNode.removeChild(s);
+
+  }
+
+
+  s.src=url+'&callback='+cb;
+
+
+  s.onerror=()=>{
+
+   cleanup();
+
+   reject(
+    new Error('No se pudo conectar con Apps Script')
+   );
+
+  };
+
+
+  document.body.appendChild(s);
+
+ });
+
+}
+
+
+/* ==========================
+   SCANNER FÍSICO
+========================== */
+
+scannerInput.addEventListener(
+'keydown',
+async function(e){
+
+ if(e.key==='Enter'){
+
+  e.preventDefault();
+
+  const code=
+  scannerInput.value.trim();
+
+  scannerInput.value='';
+
+  if(code){
+
+   await onCode(code,true);
+
+  }
+
+ }
+
+});
+
+
+/* ==========================
+   CONSULTAR PRODUCTO
+========================== */
+
+async function onCode(code,physical=false){
+
+ if(processing)
+  return;
+
+ if(!code)
+  return;
+
+ processing=true;
+
+ lastCode=code;
+
+ if(!physical)
+  await stopCamera();
+
+
+ document.getElementById('barcode').value=code;
+
+ altaBox(false);
+ movBox(false);
+ stockBox(false);
+
+
+ showStatus(
+  'Buscando producto '+code+'...'
+ );
+
+
+ try{
+
+  const r=await jsonp(
+   API+
+   '?action=lookup&barcode='+
+   encodeURIComponent(code)
+  );
+
+
+  if(r.ok){
+
+   document.getElementById('clave').value=
+   r.clave;
+
+   document.getElementById('producto').value=
+   r.producto;
+
+   document.getElementById('existencia').textContent=
+   Number(r.existencia || 0);
+
+   document.getElementById('estado').textContent=
+   r.estado || '';
+
+   stockBox(true);
+
+
+   const modo=
+   document.getElementById('modo').value;
+
+
+   if(modo==='CONSULTA'){
+
+    showStatus(
+     '🔎 '+r.producto+
+     ' — Existencia: '+
+     Number(r.existencia || 0)
+    );
+
+   }
+
+   else{
+
+    movBox(true);
+
+    const cantidad=
+    document.getElementById('cantidadRapida').value;
+
+    document.getElementById('cantidad').value=
+    cantidad;
+
+
+    if(
+     document.getElementById('automatico').checked
+    ){
+
+     await registrar();
+
+    }
+
+    else{
+
+     showStatus(
+      '✅ Producto reconocido. Confirma el movimiento.'
+     );
+
+    }
+
+   }
+
+  }
+
+  else{
+
+   document.getElementById('clave').value='';
+   document.getElementById('producto').value='';
+
+   altaBox(true);
+
+   showStatus(
+    '⚠️ Código nuevo. Captura la CLAVE.',
+    'warn'
+   );
+
+  }
+
+ }
+
+ catch(e){
+
+  showStatus(e.message,'err');
+
+ }
+
+ finally{
+
+  processing=false;
+
+  setTimeout(()=>{
+
+   scannerInput.focus();
+
+  },100);
+
+ }
+
+}
+
+
+/* ==========================
+   ALTA DE CÓDIGO
+========================== */
+
+async function alta(){
+
+ const code=
+ document.getElementById('barcode').value;
+
+ const key=
+ document.getElementById('clave').value.trim();
+
+ const user=
+ document.getElementById('usuario').value.trim();
+
+
+ if(!code || !key){
+
+  showStatus(
+   'Captura la CLAVE.',
+   'warn'
+  );
+
+  return;
+
+ }
+
+
+ showStatus('Registrando código...');
+
+
+ try{
+
+  const r=await jsonp(
+
+   API+
+   '?action=alta'+
+   '&barcode='+encodeURIComponent(code)+
+   '&clave='+encodeURIComponent(key)+
+   '&usuario='+encodeURIComponent(user)
+
+  );
+
+
+  if(r.ok){
+
+   document.getElementById('producto').value=
+   r.producto;
+
+   altaBox(false);
+
+   showStatus(
+    '✅ Código registrado correctamente.'
+   );
+
+   await onCode(code,true);
+
+  }
+
+  else{
+
+   showStatus(
+    r.message || 'No se pudo dar de alta.',
+    'err'
+   );
+
+  }
+
+ }
+
+ catch(e){
+
+  showStatus(e.message,'err');
+
+ }
+
+}
+
+
+/* ==========================
+   REGISTRAR MOVIMIENTO
+========================== */
+
+async function registrar(){
+
+ const tipo=
+ document.getElementById('modo').value;
+
+ const cantidad=
+ Number(document.getElementById('cantidad').value);
+
+ const existencia=
+ Number(document.getElementById('existencia').textContent || 0);
+
+
+ if(tipo==='CONSULTA'){
+
+  showStatus(
+   'Selecciona ENTRADA, SALIDA o AJUSTE.',
+   'warn'
+  );
+
+  return;
+
+ }
+
+
+ if(!cantidad || cantidad<=0){
+
+  showStatus(
+   'Cantidad inválida.',
+   'warn'
+  );
+
+  return;
+
+ }
+
+
+ if(
+  tipo==='SALIDA' &&
+  cantidad>existencia
+ ){
+
+  showStatus(
+   '❌ No hay suficiente existencia. Disponible: '+
+   existencia,
+   'err'
+  );
+
+  return;
+
+ }
+
+
+ const p=new URLSearchParams({
+
+  action:'register',
+
+  barcode:
+  document.getElementById('barcode').value,
+
+  tipo:tipo,
+
+  cantidad:cantidad,
+
+  usuario:
+  document.getElementById('usuario').value,
+
+  referencia:
+  document.getElementById('referencia').value,
+
+  observaciones:
+  document.getElementById('observaciones').value
+
+ });
+
+
+ showStatus('Guardando movimiento...');
+
+
+ try{
+
+  const r=
+  await jsonp(API+'?'+p.toString());
+
+
+  if(r.ok){
+
+   let nuevaExistencia=existencia;
+
+   if(tipo==='ENTRADA')
+    nuevaExistencia+=cantidad;
+
+   if(tipo==='SALIDA')
+    nuevaExistencia-=cantidad;
+
+   if(tipo==='AJUSTE')
+    nuevaExistencia+=cantidad;
+
+
+   document.getElementById('existencia').textContent=
+   nuevaExistencia;
+
+
+   showStatus(
+    '✅ '+r.producto+
+    ' — '+tipo+
+    ' '+cantidad+
+    ' — Existencia: '+
+    nuevaExistencia
+   );
+
+
+   document.getElementById('cantidad').value=
+   document.getElementById('cantidadRapida').value;
+
+
+   document.getElementById('referencia').value='';
+
+   document.getElementById('observaciones').value='';
+
+   lastCode='';
+
+
+   setTimeout(()=>{
+
+    scannerInput.focus();
+
+   },100);
+
+  }
+
+  else{
+
+   showStatus(
+    r.message ||
+    'No se pudo registrar.',
+    'err'
+   );
+
+  }
+
+ }
+
+ catch(e){
+
+  showStatus(e.message,'err');
+
+ }
+
+}
+
+
+/* ==========================
+   CÁMARA
+========================== */
+
+async function loadCameras(){
+
+ try{
+
+  const tmp=
+  await navigator.mediaDevices.getUserMedia({
+   video:true,
+   audio:false
+  });
+
+  tmp.getTracks().forEach(t=>t.stop());
+
+
+  const devices=
+  await navigator.mediaDevices.enumerateDevices();
+
+  const cams=
+  devices.filter(
+   d=>d.kind==='videoinput'
+  );
+
+
+  cameraSelect.innerHTML='';
+
+
+  cams.forEach((cam,i)=>{
+
+   const opt=
+   document.createElement('option');
+
+   opt.value=cam.deviceId;
+
+   opt.textContent=
+   cam.label || ('Cámara '+(i+1));
+
+   cameraSelect.appendChild(opt);
+
+  });
+
+
+  const rear=
+  [...cameraSelect.options].find(
+   o=>/back|rear|environment|trasera/i.test(
+    o.textContent
+   )
+  );
+
+  if(rear)
+   cameraSelect.value=rear.value;
+
+ }
+
+ catch(e){
+
+  showStatus(
+   'No se pudieron listar cámaras: '+
+   e.message,
+   'err'
+  );
+
+ }
+
+}
+
+
+async function startCamera(){
+
+ await stopCamera();
+
+
+ const deviceId=
+ cameraSelect.value;
+
+
+ const constraints={
+
+  video:deviceId
+  ?{
+    deviceId:{exact:deviceId},
+    width:{ideal:1280},
+    height:{ideal:720}
+   }
+  :{
+    facingMode:{ideal:'environment'},
+    width:{ideal:1280},
+    height:{ideal:720}
+   },
+
+  audio:false
+
+ };
+
+
+ try{
+
+  stream=
+  await navigator.mediaDevices.getUserMedia(
+   constraints
+  );
+
+  video.srcObject=stream;
+
+  await video.play();
+
+
+  document.getElementById('scanBtn')
+  .classList.add('hidden');
+
+  document.getElementById('stopBtn')
+  .classList.remove('hidden');
+
+
+  scanning=true;
+
+  showStatus(
+   '📷 Cámara activa. Buscando código...'
+  );
+
+
+  startBarcodeLoop();
+
+ }
+
+ catch(e){
+
+  showStatus(
+   'No se pudo abrir la cámara: '+
+   e.message,
+   'err'
+  );
+
+ }
+
+}
+
+
+async function stopCamera(){
+
+ scanning=false;
+
+ if(scanTimer){
+
+  clearTimeout(scanTimer);
+
+  scanTimer=null;
+
+ }
+
+
+ if(codeReader && codeReader.reset){
+
+  try{
+   codeReader.reset();
+  }
+  catch(e){}
+
+ }
+
+
+ if(stream){
+
+  stream.getTracks()
+  .forEach(t=>t.stop());
+
+  stream=null;
+
+ }
+
+
+ video.srcObject=null;
+
+
+ document.getElementById('scanBtn')
+ .classList.remove('hidden');
+
+ document.getElementById('stopBtn')
+ .classList.add('hidden');
+
+}
+
+
+async function startBarcodeLoop(){
+
+ if('BarcodeDetector' in window){
+
+  try{
+
+   const supported=
+   await BarcodeDetector.getSupportedFormats();
+
+   const wanted=[
+    'ean_13',
+    'ean_8',
+    'upc_a',
+    'upc_e',
+    'code_128',
+    'code_39',
+    'itf',
+    'codabar'
+   ];
+
+   const formats=
+   wanted.filter(
+    x=>supported.includes(x)
+   );
+
+
+   const detector=
+   new BarcodeDetector({
+    formats:formats.length
+    ?formats
+    :undefined
+   });
+
+
+   const loop=async()=>{
+
+    if(!scanning)
+     return;
+
+
+    try{
+
+     const codes=
+     await detector.detect(video);
+
+
+     if(codes && codes.length){
+
+      const raw=
+      String(
+       codes[0].rawValue || ''
+      ).trim();
+
+
+      if(raw){
+
+       await onCode(raw);
+
+       return;
+
+      }
+
+     }
+
+    }
+
+    catch(e){}
+
+
+    scanTimer=
+    setTimeout(loop,180);
+
+   };
+
+
+   loop();
+
+   return;
+
+  }
+
+  catch(e){}
+
+ }
+
+
+ try{
+
+  codeReader=
+  new ZXing.BrowserMultiFormatReader();
+
+
+  const deviceId=
+  cameraSelect.value || undefined;
+
+
+  codeReader.decodeFromVideoDevice(
+   deviceId,
+   video,
+   (result,err)=>{
+
+    if(!scanning)
+     return;
+
+
+    if(result){
+
+     const raw=
+     String(
+      result.getText() || ''
+     ).trim();
+
+
+     if(raw)
+      onCode(raw);
+
+    }
+
+   }
+  );
+
+ }
+
+ catch(e){
+
+  showStatus(
+   'No se pudo iniciar el lector: '+
+   e.message,
+   'err'
+  );
+
+ }
+
+}
+
+
+/* ==========================
+   INICIO
+========================== */
+
+window.addEventListener(
+'load',
+async()=>{
+
+ await loadCameras();
+
+ scannerInput.focus();
+
+});
+
+
+cameraSelect.addEventListener(
+'change',
+()=>{
+
+ if(stream)
+  startCamera();
+
+});
+
 </script>
+
 </body>
 </html>
