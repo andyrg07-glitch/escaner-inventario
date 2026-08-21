@@ -373,31 +373,93 @@ function stockBox(show){
 
 function jsonp(url){
 
- return new Promise((resolve,reject)=>{
+  return new Promise((resolve,reject)=>{
 
-  const cb=
-  'cb_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+    const callbackName =
+      'jsonp_' + Date.now() + '_' + Math.floor(Math.random()*100000);
 
-  const s=document.createElement('script');
+    const script = document.createElement('script');
 
-  const timer=setTimeout(()=>{
+    let finished = false;
 
-   cleanup();
+    const timeout = setTimeout(()=>{
 
-   reject(
-    new Error('Tiempo de espera agotado')
-   );
+      if(finished) return;
 
-  },15000);
+      finished = true;
+
+      cleanup();
+
+      reject(
+        new Error('Tiempo de espera agotado al conectar con Apps Script')
+      );
+
+    },20000);
 
 
-  window[cb]=(data)=>{
+    window[callbackName] = function(data){
 
-   cleanup();
+      if(finished) return;
 
-   resolve(data);
+      finished = true;
 
-  };
+      cleanup();
+
+      resolve(data);
+
+    };
+
+
+    function cleanup(){
+
+      clearTimeout(timeout);
+
+      try{
+        delete window[callbackName];
+      }catch(e){}
+
+      if(script.parentNode){
+        script.parentNode.removeChild(script);
+      }
+
+    }
+
+
+    const separator =
+      url.includes('?') ? '&' : '?';
+
+    script.src =
+      url +
+      separator +
+      'callback=' +
+      encodeURIComponent(callbackName) +
+      '&_=' +
+      Date.now();
+
+
+    script.async = true;
+
+
+    script.onerror = function(){
+
+      if(finished) return;
+
+      finished = true;
+
+      cleanup();
+
+      reject(
+        new Error('No se pudo conectar con Apps Script')
+      );
+
+    };
+
+
+    document.head.appendChild(script);
+
+  });
+
+}
 
 
   function cleanup(){
